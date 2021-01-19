@@ -1,7 +1,11 @@
+using CDE.Domain.Interfaces.Repository;
+using CDE.Infra.Context;
+using CDE.Infra.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,13 +26,19 @@ namespace CDE.Application
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<CDEContext>(x => x.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection")));
+
+            services.AddScoped<ILocalizacaoRepository, LocalizacaoRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

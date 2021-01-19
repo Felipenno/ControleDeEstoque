@@ -5,7 +5,7 @@ namespace CDE.Domain.Interfaces.Repository
 {
     public interface IProdutoRepository : IBaseRepository<Produto>
     {
-        Task<Produto> ListarTodos();
-        Task<Produto> ListarPorDescricao();
+        Task<Produto[]> ListarTodos();
+        Task<Produto> PegarPorNome(string produtoNome);
     }
 }

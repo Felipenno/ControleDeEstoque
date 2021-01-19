@@ -8,6 +8,9 @@
         public string Prateleira { get; private set; }  
         public string Vao { get; private set; }
 
+        public int ProdutoId { get; set; }
+        public Produto Produto { get; set; }
+
         public Localizacao(int localizacaoId, string andar, string corredor, string prateleira, string vao)
         {
             LocalizacaoId = localizacaoId;

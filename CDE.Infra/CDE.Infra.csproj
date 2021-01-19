@@ -5,9 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Mapping\" />
-    <Folder Include="Repository\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CDE.Domain\CDE.Domain.csproj" />
   </ItemGroup>
 
 </Project>

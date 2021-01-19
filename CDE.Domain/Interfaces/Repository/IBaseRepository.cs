@@ -8,6 +8,6 @@ namespace CDE.Domain.Interfaces.Repository
         void Atualizar(T entity);
         void Deletar(T entity);
         void SalvarAsync();
-        Task<T> ListarPorId();
+        Task<T> PegarPorId(int id);
     }
 }
