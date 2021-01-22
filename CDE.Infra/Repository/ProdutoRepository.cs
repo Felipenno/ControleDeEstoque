@@ -34,17 +34,17 @@ namespace CDE.Infra.Repository
             _context.Produtos.Remove(produto);
         }
 
-        public async Task<Produto> PegarPorNome(string produtoNome)
+        public async Task<Produto> EncontrarPorNomeAsync(string produtoNome)
         {
             return await _context.Produtos.Where(x => x.ProdutoNome == produtoNome).FirstOrDefaultAsync();
         }
 
-        public async Task<Produto> PegarPorId(int id)
+        public async Task<Produto> EncontrarPorIdAsync(int id)
         {
             return await _context.Produtos.Where(x => x.ProdutoId == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Produto[]> ListarTodos()
+        public async Task<Produto[]> ListarTodosAsync()
         {
             return await _context.Produtos.ToArrayAsync();
         }

@@ -34,12 +34,12 @@ namespace CDE.Infra.Repository
             _context.Localizacao.Remove(localizacao);
         }
 
-        public async Task<Localizacao> PegarPorId(int id)
+        public async Task<Localizacao> EncontrarPorIdAsync(int id)
         {
             return await _context.Localizacao.Where(x => x.LocalizacaoId == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Localizacao[]> ListarTodos()
+        public async Task<Localizacao[]> ListarTodosAsync()
         {
             return await _context.Localizacao.ToArrayAsync();
         }

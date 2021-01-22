@@ -11,13 +11,17 @@
         public int ProdutoId { get; set; }
         public Produto Produto { get; set; }
 
-        public Localizacao(int localizacaoId, string andar, string corredor, string prateleira, string vao)
+        public Localizacao(string andar, string corredor, string prateleira, string vao)
         {
-            LocalizacaoId = localizacaoId;
             Andar = andar;
             Corredor = corredor;
             Prateleira = prateleira;
             Vao = vao;
+        }
+
+        public Localizacao(int localizacaoId, string andar, string corredor, string prateleira, string vao) : this(andar, corredor, prateleira, vao)
+        {
+            LocalizacaoId = localizacaoId;
         }
 
         protected Localizacao() { }

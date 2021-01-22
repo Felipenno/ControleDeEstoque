@@ -5,24 +5,29 @@ namespace CDE.Domain.Entities
 {
     public class Produto
     {
-        public int ProdutoId { get; set; }
-        public string ProdutoNome { get; set; }
-        public int ProdutoQuantidade { get; set; }
-        public bool ProdutoAtivo { get; set; }
-        public ProdutoGrupo ProdutoGrupo { get; set; }
-        public UnidadeMedida ProdutoUnidadeMedida { get; set; }
+        public int ProdutoId { get; private set; }
+        public string ProdutoNome { get; private set; }
+        public int ProdutoQuantidade { get; private set; }
+        public bool ProdutoAtivo { get; private set; }
+        public ProdutoGrupo ProdutoGrupo { get; private set; }
+        public UnidadeMedida ProdutoUnidadeMedida { get; private set; }
 
-        public List<Localizacao> ProdutoLocalizacao { get; set; }
+        public List<Localizacao> ProdutoLocalizacao { get; private set; }
 
-        public Produto(int produtoId, string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida, List<Localizacao> produtoLocalizacao)
+        public Produto(string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida, List<Localizacao> produtoLocalizacao)
         {
-            ProdutoId = produtoId;
             ProdutoNome = produtoNome;
             ProdutoQuantidade = produtoQuantidade;
             ProdutoAtivo = produtoAtivo;
             ProdutoGrupo = produtoGrupo;
             ProdutoUnidadeMedida = produtoUnidadeMedida;
             ProdutoLocalizacao = produtoLocalizacao;
+        }
+
+        public Produto(int produtoId, string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida, List<Localizacao> produtoLocalizacao) : this(produtoNome, produtoQuantidade, produtoAtivo, produtoGrupo, produtoUnidadeMedida, produtoLocalizacao)
+        {
+            ProdutoId = produtoId;
+            
         }
 
         protected Produto() { }

@@ -5,6 +5,6 @@ namespace CDE.Domain.Interfaces.Repository
 {
     public interface ILocalizacaoRepository: IBaseRepository<Localizacao>
     {
-        Task<Localizacao[]> ListarTodos();
+        Task<Localizacao[]> ListarTodosAsync();
     }
 }

@@ -2,19 +2,28 @@
 {
     public class Usuario
     {
-        public int UsuarioId { get; set; }
-        public string UsuarioNome { get; set; }
-        public string UsuarioCpf { get; set; }
-        public string UsuarioEmail { get; set; }
-        public string UsuarioSenha { get; set; }
+        public int UsuarioId { get; private set; }
+        public string UsuarioNome { get; private set; }
+        public string UsuarioCpf { get; private set; }
+        public string UsuarioEmail { get; private set; }
+        public string UsuarioSenha { get; private set; }
 
-        public Usuario(int usuarioId, string usuarioNome, string usuarioCpf, string usuarioEmail, string usuarioSenha)
+        public Usuario(string usuarioNome, string usuarioCpf)
         {
-            UsuarioId = usuarioId;
             UsuarioNome = usuarioNome;
             UsuarioCpf = usuarioCpf;
+        }
+
+        public Usuario(string usuarioNome, string usuarioCpf, string usuarioEmail, string usuarioSenha) : this(usuarioNome, usuarioCpf)
+        {
+
             UsuarioEmail = usuarioEmail;
             UsuarioSenha = usuarioSenha;
+        }
+
+        public Usuario(int usuarioId, string usuarioNome, string usuarioCpf, string usuarioEmail, string usuarioSenha) : this(usuarioNome, usuarioCpf, usuarioEmail, usuarioSenha)
+        {
+            UsuarioId = usuarioId;
         }
 
         protected Usuario() { }

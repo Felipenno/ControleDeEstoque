@@ -34,9 +34,19 @@ namespace CDE.Infra.Repository
             _context.Usuarios.Remove(usuario);
         }
 
-        public async Task<Usuario> PegarPorId(int id)
+        public async Task<Usuario> EncontrarPorIdAsync(int id)
         {
             return await _context.Usuarios.Where(x => x.UsuarioId == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario> EncontrarUsuarioAsync(string email)
+        {
+            return await _context.Usuarios.Where(x => x.UsuarioEmail == email).FirstOrDefaultAsync();
+        }
+
+        public async Task<Usuario> Logar(string nome, string senha)
+        {
+            return await _context.Usuarios.Where(x => x.UsuarioNome == nome && x.UsuarioSenha == senha).FirstOrDefaultAsync();
         }
 
         public void SalvarAsync()
