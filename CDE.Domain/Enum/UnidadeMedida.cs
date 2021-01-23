@@ -2,6 +2,7 @@
 {
     public enum UnidadeMedida
     {
+        Outros,
         Kilo,
         Litro,
         Grama,
@@ -9,7 +10,6 @@
         Mililitro,
         Caixa,
         Bandeja,
-        Pacote,
-        Outro
+        Pacote
     }
 }

@@ -7,7 +7,6 @@ namespace CDE.Domain.Interfaces.Repository
         void Adicionar(T entity);
         void Atualizar(T entity);
         void Deletar(T entity);
-        void SalvarAsync();
         Task<T> EncontrarPorIdAsync(int id);
     }
 }

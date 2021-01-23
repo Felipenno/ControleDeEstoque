@@ -2,10 +2,7 @@
 using CDE.Domain.Interfaces.Repository;
 using CDE.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CDE.Infra.Repository
@@ -22,16 +19,19 @@ namespace CDE.Infra.Repository
         public void Adicionar(Usuario usuario)
         {
             _context.Usuarios.Add(usuario);
+            _context.SaveChanges();
         }
 
         public void Atualizar(Usuario usuario)
         {
             _context.Usuarios.Update(usuario);
+            _context.SaveChanges();
         }
 
         public void Deletar(Usuario usuario)
         {
             _context.Usuarios.Remove(usuario);
+            _context.SaveChanges();
         }
 
         public async Task<Usuario> EncontrarPorIdAsync(int id)
@@ -44,14 +44,10 @@ namespace CDE.Infra.Repository
             return await _context.Usuarios.Where(x => x.UsuarioEmail == email).FirstOrDefaultAsync();
         }
 
-        public async Task<Usuario> Logar(string nome, string senha)
+        public async Task<Usuario> Logar(string email, string senha)
         {
-            return await _context.Usuarios.Where(x => x.UsuarioNome == nome && x.UsuarioSenha == senha).FirstOrDefaultAsync();
+            return await _context.Usuarios.Where(x => x.UsuarioEmail == email && x.UsuarioSenha == senha).FirstOrDefaultAsync();
         }
 
-        public void SalvarAsync()
-        {
-            _context.SaveChangesAsync();
-        }
     }
 }

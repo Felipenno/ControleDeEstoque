@@ -6,6 +6,6 @@ namespace CDE.Domain.Interfaces.Repository
     public interface IUsuarioRepository : IBaseRepository<Usuario>
     {
         Task<Usuario> EncontrarUsuarioAsync(string email);
-        Task<Usuario> Logar(string nome, string senha);
+        Task<Usuario> Logar(string email, string senha);
     }
 }

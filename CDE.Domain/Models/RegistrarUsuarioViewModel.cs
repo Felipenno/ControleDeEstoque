@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CDE.Domain.Models
+﻿namespace CDE.Domain.Models
 {
     public class RegistrarUsuarioViewModel
     {

@@ -1,4 +1,7 @@
-﻿namespace CDE.Domain.Entities
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace CDE.Domain.Entities
 {
     public class Usuario
     {
@@ -18,7 +21,7 @@
         {
 
             UsuarioEmail = usuarioEmail;
-            UsuarioSenha = usuarioSenha;
+            UsuarioSenha = Codificar(usuarioSenha);
         }
 
         public Usuario(int usuarioId, string usuarioNome, string usuarioCpf, string usuarioEmail, string usuarioSenha) : this(usuarioNome, usuarioCpf, usuarioEmail, usuarioSenha)
@@ -27,5 +30,20 @@
         }
 
         protected Usuario() { }
+
+        public string Codificar(string texto)
+        {
+            var md5 = MD5.Create();
+            byte[] bytes = Encoding.ASCII.GetBytes(texto);
+            byte[] hash = md5.ComputeHash(bytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+
+            return sb.ToString();
+        }
     }
 }

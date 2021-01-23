@@ -2,6 +2,7 @@
 using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace CDE.Application.Controllers
@@ -20,66 +21,89 @@ namespace CDE.Application.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var listaProdutos = await _produtoRepository.ListarTodosAsync();
+            try
+            {
+                var listaProdutos = await _produtoRepository.ListarTodosAsync();
 
-            return Ok(listaProdutos);
+                return Ok(listaProdutos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao buscar produtos ({ex})");
+            }
         }
 
         [HttpPost]
         public IActionResult CriarProduto(CriarProdutoViewModel novoProduto)
         {
-            Produto produto = new Produto(
+            try
+            {
+                Produto produto = new Produto(
                 novoProduto.ProdutoNome,
                 novoProduto.ProdutoQuantidade,
                 novoProduto.ProdutoAtivo,
                 novoProduto.ProdutoGrupo,
-                novoProduto.ProdutoUnidadeMedida,
-                novoProduto.ProdutoLocalizacao
+                novoProduto.ProdutoUnidadeMedida
                 );
 
-            _produtoRepository.Adicionar(produto);
-            _produtoRepository.SalvarAsync();
+                _produtoRepository.Adicionar(produto);
 
-            return Created("", novoProduto);
+                return Created("", novoProduto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao criar novo produto ({ex})");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarProduto(int id, AtualizarProdutoViewModel atualizarProduto)
         {
-            if (id != atualizarProduto.ProdutoId)
+            try
             {
-                return BadRequest();
+                if (id != atualizarProduto.ProdutoId)
+                {
+                    return BadRequest();
+                }
+
+                Produto produto = new Produto(
+                    atualizarProduto.ProdutoId,
+                    atualizarProduto.ProdutoNome,
+                    atualizarProduto.ProdutoQuantidade,
+                    atualizarProduto.ProdutoAtivo,
+                    atualizarProduto.ProdutoGrupo,
+                    atualizarProduto.ProdutoUnidadeMedida
+                    );
+
+                _produtoRepository.Atualizar(produto);
+
+                return NoContent();
             }
-
-            Produto produto = new Produto(
-                atualizarProduto.ProdutoId,
-                atualizarProduto.ProdutoNome,
-                atualizarProduto.ProdutoQuantidade,
-                atualizarProduto.ProdutoAtivo,
-                atualizarProduto.ProdutoGrupo,
-                atualizarProduto.ProdutoUnidadeMedida,
-                atualizarProduto.ProdutoLocalizacao
-                );
-
-            _produtoRepository.Atualizar(produto);
-            _produtoRepository.SalvarAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao tentar atualizar produto ({ex})");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoverProduto(int id)
         {
-            var produto = await _produtoRepository.EncontrarPorIdAsync(id);
-            if(produto == null)
+            try
             {
-                return BadRequest();
+                var produto = await _produtoRepository.EncontrarPorIdAsync(id);
+                if (produto == null)
+                {
+                    return BadRequest();
+                }
+
+                _produtoRepository.Deletar(produto);
+
+                return Ok();
             }
-
-            _produtoRepository.Deletar(produto);
-            _produtoRepository.SalvarAsync();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao tentar deletar produto ({ex})");
+            }
         }
     }
 }

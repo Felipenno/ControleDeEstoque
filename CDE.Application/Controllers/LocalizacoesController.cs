@@ -3,8 +3,6 @@ using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CDE.Application.Controllers
@@ -23,50 +21,89 @@ namespace CDE.Application.Controllers
         [HttpGet]
         public async Task<IActionResult> Listar()
         {
-            var listaLocalizacoes = await _localizacaoRepository.ListarTodosAsync();
+            try
+            {
+                var listaLocalizacoes = await _localizacaoRepository.ListarTodosAsync();
 
-            return Ok(listaLocalizacoes);
+                return Ok(listaLocalizacoes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao buscar localizacoes ({ex})");
+            }
         }
 
         [HttpPost]
         public IActionResult CriarLocalizacao(CriarLocalizacaoViewModel novoLocal)
         {
-            Localizacao localizacao = new Localizacao(novoLocal.Andar, novoLocal.Corredor, novoLocal.Prateleira, novoLocal.Vao);
-            _localizacaoRepository.Adicionar(localizacao);
-            _localizacaoRepository.SalvarAsync();
+            try
+            {
+                Localizacao localizacao = new Localizacao(
+                novoLocal.Andar,
+                novoLocal.Corredor,
+                novoLocal.Prateleira,
+                novoLocal.Vao,
+                novoLocal.ProdutoId
+                );
 
-            return Created("", novoLocal);
+                _localizacaoRepository.Adicionar(localizacao);
+
+                return Created("", novoLocal);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao criar local ({ex})");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarLocalizacao(int id, AtualizarLocalizacaoViewModel atualizarLocal)
         {
-            if (id != atualizarLocal.LocalizacaoId)
+            try
             {
-                return BadRequest();
+                if (id != atualizarLocal.LocalizacaoId)
+                {
+                    return BadRequest();
+                }
+
+                Localizacao localizacao = new Localizacao(
+                    atualizarLocal.LocalizacaoId,
+                    atualizarLocal.Andar,
+                    atualizarLocal.Corredor,
+                    atualizarLocal.Prateleira,
+                    atualizarLocal.Vao,
+                    atualizarLocal.ProdutoId
+                    );
+
+                _localizacaoRepository.Atualizar(localizacao);
+
+                return NoContent();
             }
-
-            Localizacao localizacao = new Localizacao(atualizarLocal.LocalizacaoId, atualizarLocal.Andar, atualizarLocal.Corredor, atualizarLocal.Prateleira, atualizarLocal.Vao); ;
-
-            _localizacaoRepository.Atualizar(localizacao);
-            _localizacaoRepository.SalvarAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao atualizar local ({ex})");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoverLocalizacao(int id)
         {
-            var localizacao = await _localizacaoRepository.EncontrarPorIdAsync(id);
-            if(localizacao == null)
+            try
             {
-                return NotFound();
+                var localizacao = await _localizacaoRepository.EncontrarPorIdAsync(id);
+                if (localizacao == null)
+                {
+                    return NotFound();
+                }
+
+                _localizacaoRepository.Deletar(localizacao);
+
+                return Ok();
             }
-
-            _localizacaoRepository.Deletar(localizacao);
-            _localizacaoRepository.SalvarAsync();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao tentar remover local ({ex})");
+            }
         }
     }
 }

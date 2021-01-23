@@ -27,7 +27,7 @@ namespace CDE.Application
 
         public IConfiguration Configuration { get; }
 
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -42,7 +42,7 @@ namespace CDE.Application
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         }
 
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

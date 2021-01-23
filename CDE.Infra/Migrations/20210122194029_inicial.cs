@@ -2,7 +2,7 @@
 
 namespace CDE.Infra.Migrations
 {
-    public partial class primeiraMigration : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

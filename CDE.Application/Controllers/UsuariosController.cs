@@ -3,8 +3,6 @@ using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CDE.Application.Controllers
@@ -24,28 +22,39 @@ namespace CDE.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Logar(LoginUsuarioViewModel login)
         {
-            var usuario = await _usuarioRepository.Logar(login.UsuarioSenha, login.UsuarioEmail);
-            if(usuario == null)
+            try
             {
-                return BadRequest("Erro ao tentar acessar");
-            }
+                var usuario = await _usuarioRepository.Logar(login.UsuarioEmail, login.GetSenha());
+                if (usuario == null)
+                {
+                    return BadRequest("Dados incorretos");
+                }
 
-            return Ok(usuario.UsuarioNome);
+                return Ok(usuario.UsuarioNome);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao tentar acessar ({ex})");
+            }
         }
 
         [Route("registrar")]
         [HttpPost]
         public IActionResult RegistrarUsuario(RegistrarUsuarioViewModel registrar)
         {
-            Usuario usuario = new Usuario(registrar.UsuarioNome, registrar.UsuarioCpf, registrar.UsuarioEmail, registrar.UsuarioSenha);
+            try
+            {
+                Usuario usuario = new Usuario(registrar.UsuarioNome, registrar.UsuarioCpf, registrar.UsuarioEmail, registrar.UsuarioSenha);
 
-            _usuarioRepository.Adicionar(usuario);
-            _usuarioRepository.SalvarAsync();
+                _usuarioRepository.Adicionar(usuario);
 
-            return Created("", registrar);
+                return Created("", registrar);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao registrar usuario ({ex})");
+            }
         }
-
-
 
     }
 }

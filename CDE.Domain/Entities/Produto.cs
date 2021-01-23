@@ -14,20 +14,19 @@ namespace CDE.Domain.Entities
 
         public List<Localizacao> ProdutoLocalizacao { get; private set; }
 
-        public Produto(string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida, List<Localizacao> produtoLocalizacao)
+        public Produto(string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida)
         {
             ProdutoNome = produtoNome;
             ProdutoQuantidade = produtoQuantidade;
             ProdutoAtivo = produtoAtivo;
             ProdutoGrupo = produtoGrupo;
             ProdutoUnidadeMedida = produtoUnidadeMedida;
-            ProdutoLocalizacao = produtoLocalizacao;
         }
 
-        public Produto(int produtoId, string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida, List<Localizacao> produtoLocalizacao) : this(produtoNome, produtoQuantidade, produtoAtivo, produtoGrupo, produtoUnidadeMedida, produtoLocalizacao)
+        public Produto(int produtoId, string produtoNome, int produtoQuantidade, bool produtoAtivo, ProdutoGrupo produtoGrupo, UnidadeMedida produtoUnidadeMedida) : this(produtoNome, produtoQuantidade, produtoAtivo, produtoGrupo, produtoUnidadeMedida)
         {
             ProdutoId = produtoId;
-            
+
         }
 
         protected Produto() { }

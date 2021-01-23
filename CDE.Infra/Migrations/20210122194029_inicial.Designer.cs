@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CDE.Infra.Migrations
 {
     [DbContext(typeof(CDEContext))]
-    [Migration("20210122062158_primeiraMigration")]
-    partial class primeiraMigration
+    [Migration("20210122194029_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,11 +1,10 @@
 ﻿using CDE.Domain.Entities;
 using CDE.Domain.Interfaces.Repository;
+using CDE.Domain.Models;
 using CDE.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CDE.Infra.Repository
@@ -22,16 +21,19 @@ namespace CDE.Infra.Repository
         public void Adicionar(Localizacao localizacao)
         {
             _context.Localizacao.Add(localizacao);
+            _context.SaveChanges();
         }
 
         public void Atualizar(Localizacao localizacao)
         {
             _context.Localizacao.Update(localizacao);
+            _context.SaveChanges();
         }
 
         public void Deletar(Localizacao localizacao)
         {
             _context.Localizacao.Remove(localizacao);
+            _context.SaveChanges();
         }
 
         public async Task<Localizacao> EncontrarPorIdAsync(int id)
@@ -39,14 +41,28 @@ namespace CDE.Infra.Repository
             return await _context.Localizacao.Where(x => x.LocalizacaoId == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Localizacao[]> ListarTodosAsync()
+        public async Task<List<ListarLocalizacoesViewModel>> ListarTodosAsync()
         {
-            return await _context.Localizacao.ToArrayAsync();
+            List<ListarLocalizacoesViewModel> listarLocal = new List<ListarLocalizacoesViewModel>();
+            List<Localizacao> local = await _context.Localizacao.Include(p => p.Produto).ToListAsync();
+            foreach (Localizacao l in local)
+            {
+                listarLocal.Add(new ListarLocalizacoesViewModel(
+                    l.LocalizacaoId,
+                    l.Andar,
+                    l.Corredor,
+                    l.Prateleira,
+                    l.Vao,
+                    l.Produto.ProdutoNome,
+                    l.Produto.ProdutoQuantidade,
+                    l.Produto.ProdutoAtivo,
+                    l.Produto.ProdutoGrupo,
+                    l.Produto.ProdutoUnidadeMedida
+                    ));
+            }
+
+            return listarLocal;
         }
 
-        public void SalvarAsync()
-        {
-             _context.SaveChangesAsync();
-        }
     }
 }

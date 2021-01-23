@@ -2,13 +2,13 @@
 {
     public enum ProdutoGrupo
     {
+        Outros,
         Alimentos,
         Bebidas,
         Carnes,
         Frios,
         Higiene,
         Limpeza,
-        Padaria,
-        Outros
+        Padaria
     }
 }

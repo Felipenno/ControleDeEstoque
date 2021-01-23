@@ -1,9 +1,6 @@
 ﻿using CDE.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CDE.Infra.Mapping
 {
@@ -28,7 +25,12 @@ namespace CDE.Infra.Mapping
             builder.Property(e => e.Vao)
                 .IsRequired()
                 .HasColumnType("varchar(10)");
-                
+
+            builder
+                .HasOne(p => p.Produto)
+                .WithMany(p => p.ProdutoLocalizacao)
+                .HasForeignKey(p => p.ProdutoId);
+
         }
     }
 }

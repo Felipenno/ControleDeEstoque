@@ -1,9 +1,6 @@
 ﻿using CDE.Domain.Entities;
 using CDE.Infra.Mapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CDE.Infra.Context
 {

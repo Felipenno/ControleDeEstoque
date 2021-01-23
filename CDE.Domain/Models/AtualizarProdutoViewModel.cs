@@ -1,8 +1,4 @@
-﻿using CDE.Domain.Entities;
-using CDE.Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CDE.Domain.Enum;
 
 namespace CDE.Domain.Models
 {
@@ -15,6 +11,5 @@ namespace CDE.Domain.Models
         public ProdutoGrupo ProdutoGrupo { get; set; }
         public UnidadeMedida ProdutoUnidadeMedida { get; set; }
 
-        public List<Localizacao> ProdutoLocalizacao { get; set; }
     }
 }
