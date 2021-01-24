@@ -1,6 +1,7 @@
 ﻿using CDE.Domain.Entities;
 using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace CDE.Application.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class LocalizacoesController : Controller
     {
         private readonly ILocalizacaoRepository _localizacaoRepository;

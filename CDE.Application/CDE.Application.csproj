@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>CDE.Application.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CDE.Domain\CDE.Domain.csproj" />
     <ProjectReference Include="..\CDE.Infra\CDE.Infra.csproj" />
+    <ProjectReference Include="..\CDE.Service\CDE.Service.csproj" />
   </ItemGroup>
 
 

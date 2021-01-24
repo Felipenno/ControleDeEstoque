@@ -1,4 +1,5 @@
 ﻿using CDE.Domain.Entities;
+using CDE.Domain.Interfaces.Jwt;
 using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace CDE.Application.Controllers
     public class UsuariosController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IAuthenticationService _authenticationService;
 
-        public UsuariosController(IUsuarioRepository usuarioRepository)
+        public UsuariosController(IUsuarioRepository usuarioRepository, IAuthenticationService authenticationService)
         {
             _usuarioRepository = usuarioRepository;
+            _authenticationService = authenticationService;
         }
 
         [Route("login")]
@@ -30,7 +33,10 @@ namespace CDE.Application.Controllers
                     return BadRequest("Dados incorretos");
                 }
 
-                return Ok(usuario.UsuarioNome);
+                JwtUsuarioModel jwtUsuario = new JwtUsuarioModel(usuario.UsuarioId, usuario.UsuarioNome, usuario.UsuarioEmail);
+                var token = _authenticationService.GerarToken(jwtUsuario);
+
+                return Ok(new { Token = token, Usuario = jwtUsuario });
             }
             catch (Exception ex)
             {
