@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 
 namespace CDE.Domain.Interfaces.Repository
 {
-    public interface IUsuarioRepository : IBaseRepository<Usuario>
+    public interface IUsuarioRepository
     {
+        void Adicionar(Usuario usuario);
         Task<Usuario> EncontrarUsuarioAsync(string email);
         Task<Usuario> Logar(string email, string senha);
     }

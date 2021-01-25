@@ -18,22 +18,47 @@ namespace CDE.Infra.Repository
             _context = context;
         }
 
-        public void Adicionar(Localizacao localizacao)
+        public void Adicionar(CriarLocalizacaoViewModel novoLocal)
         {
+            Localizacao localizacao = new Localizacao(
+                novoLocal.Andar,
+                novoLocal.Corredor,
+                novoLocal.Prateleira,
+                novoLocal.Vao,
+                novoLocal.ProdutoId
+                );
+
             _context.Localizacao.Add(localizacao);
             _context.SaveChanges();
         }
 
-        public void Atualizar(Localizacao localizacao)
+        public void Atualizar(AtualizarLocalizacaoViewModel atualizarLocal)
         {
+            Localizacao localizacao = new Localizacao(
+                    atualizarLocal.LocalizacaoId,
+                    atualizarLocal.Andar,
+                    atualizarLocal.Corredor,
+                    atualizarLocal.Prateleira,
+                    atualizarLocal.Vao,
+                    atualizarLocal.ProdutoId
+                    );
+
             _context.Localizacao.Update(localizacao);
             _context.SaveChanges();
         }
 
-        public void Deletar(Localizacao localizacao)
+        public async Task<bool> Deletar(int id)
         {
+            var localizacao = await EncontrarPorIdAsync(id);
+            if (localizacao == null)
+            {
+                return true;
+            }
+
             _context.Localizacao.Remove(localizacao);
             _context.SaveChanges();
+
+            return false;
         }
 
         public async Task<Localizacao> EncontrarPorIdAsync(int id)

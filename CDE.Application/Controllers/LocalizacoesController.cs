@@ -1,5 +1,4 @@
-﻿using CDE.Domain.Entities;
-using CDE.Domain.Interfaces.Repository;
+﻿using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,15 +39,7 @@ namespace CDE.Application.Controllers
         {
             try
             {
-                Localizacao localizacao = new Localizacao(
-                novoLocal.Andar,
-                novoLocal.Corredor,
-                novoLocal.Prateleira,
-                novoLocal.Vao,
-                novoLocal.ProdutoId
-                );
-
-                _localizacaoRepository.Adicionar(localizacao);
+                _localizacaoRepository.Adicionar(novoLocal);
 
                 return Created("", novoLocal);
             }
@@ -59,25 +50,11 @@ namespace CDE.Application.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarLocalizacao(int id, AtualizarLocalizacaoViewModel atualizarLocal)
+        public IActionResult AtualizarLocalizacao(AtualizarLocalizacaoViewModel atualizarLocal)
         {
             try
             {
-                if (id != atualizarLocal.LocalizacaoId)
-                {
-                    return BadRequest();
-                }
-
-                Localizacao localizacao = new Localizacao(
-                    atualizarLocal.LocalizacaoId,
-                    atualizarLocal.Andar,
-                    atualizarLocal.Corredor,
-                    atualizarLocal.Prateleira,
-                    atualizarLocal.Vao,
-                    atualizarLocal.ProdutoId
-                    );
-
-                _localizacaoRepository.Atualizar(localizacao);
+                _localizacaoRepository.Atualizar(atualizarLocal);
 
                 return NoContent();
             }
@@ -92,13 +69,11 @@ namespace CDE.Application.Controllers
         {
             try
             {
-                var localizacao = await _localizacaoRepository.EncontrarPorIdAsync(id);
-                if (localizacao == null)
+                var idNaoEncontrado = await _localizacaoRepository.Deletar(id);
+                if (idNaoEncontrado)
                 {
                     return NotFound();
                 }
-
-                _localizacaoRepository.Deletar(localizacao);
 
                 return Ok();
             }

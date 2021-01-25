@@ -49,10 +49,6 @@ namespace CDE.Application
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAuthenticationService, JwtService>();
 
-
-
-
-
             services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -79,21 +75,7 @@ namespace CDE.Application
                     }
                 });
 
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-
             });
-
-
-
-
-
-
-
-
-
-
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfigurations:Secret").Value);
             services.AddAuthentication(x =>
@@ -114,7 +96,6 @@ namespace CDE.Application
                     };
                 });
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

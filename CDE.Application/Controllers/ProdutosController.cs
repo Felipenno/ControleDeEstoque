@@ -1,5 +1,4 @@
-﻿using CDE.Domain.Entities;
-using CDE.Domain.Interfaces.Repository;
+﻿using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,15 +39,7 @@ namespace CDE.Application.Controllers
         {
             try
             {
-                Produto produto = new Produto(
-                novoProduto.ProdutoNome,
-                novoProduto.ProdutoQuantidade,
-                novoProduto.ProdutoAtivo,
-                novoProduto.ProdutoGrupo,
-                novoProduto.ProdutoUnidadeMedida
-                );
-
-                _produtoRepository.Adicionar(produto);
+                _produtoRepository.Adicionar(novoProduto);
 
                 return Created("", novoProduto);
             }
@@ -59,25 +50,11 @@ namespace CDE.Application.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarProduto(int id, AtualizarProdutoViewModel atualizarProduto)
+        public IActionResult AtualizarProduto(AtualizarProdutoViewModel atualizarProduto)
         {
             try
             {
-                if (id != atualizarProduto.ProdutoId)
-                {
-                    return BadRequest();
-                }
-
-                Produto produto = new Produto(
-                    atualizarProduto.ProdutoId,
-                    atualizarProduto.ProdutoNome,
-                    atualizarProduto.ProdutoQuantidade,
-                    atualizarProduto.ProdutoAtivo,
-                    atualizarProduto.ProdutoGrupo,
-                    atualizarProduto.ProdutoUnidadeMedida
-                    );
-
-                _produtoRepository.Atualizar(produto);
+                _produtoRepository.Atualizar(atualizarProduto);
 
                 return NoContent();
             }
@@ -92,13 +69,13 @@ namespace CDE.Application.Controllers
         {
             try
             {
-                var produto = await _produtoRepository.EncontrarPorIdAsync(id);
-                if (produto == null)
+                var idNaoEncontrado = await _produtoRepository.Deletar(id);
+                if (idNaoEncontrado)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
 
-                _produtoRepository.Deletar(produto);
+                await _produtoRepository.Deletar(id);
 
                 return Ok();
             }

@@ -18,22 +18,48 @@ namespace CDE.Infra.Repository
             _context = context;
         }
 
-        public void Adicionar(Produto produto)
+        public void Adicionar(CriarProdutoViewModel novoProduto)
         {
+
+            Produto produto = new Produto(
+            novoProduto.ProdutoNome,
+            novoProduto.ProdutoQuantidade,
+            novoProduto.ProdutoAtivo,
+            novoProduto.ProdutoGrupo,
+            novoProduto.ProdutoUnidadeMedida
+            );
+
             _context.Produtos.Add(produto);
             _context.SaveChanges();
         }
 
-        public void Atualizar(Produto produto)
+        public void Atualizar(AtualizarProdutoViewModel atualizarProduto)
         {
+            Produto produto = new Produto(
+                    atualizarProduto.ProdutoId,
+                    atualizarProduto.ProdutoNome,
+                    atualizarProduto.ProdutoQuantidade,
+                    atualizarProduto.ProdutoAtivo,
+                    atualizarProduto.ProdutoGrupo,
+                    atualizarProduto.ProdutoUnidadeMedida
+                    );
+
             _context.Produtos.Update(produto);
             _context.SaveChanges();
         }
 
-        public void Deletar(Produto produto)
+        public async Task<bool> Deletar(int id)
         {
-            _context.Produtos.Remove(produto);
+            var localizacao = await EncontrarPorIdAsync(id);
+            if (localizacao == null)
+            {
+                return true;
+            }
+
+            _context.Produtos.Remove(localizacao);
             _context.SaveChanges();
+
+            return false;
         }
 
         public async Task<Produto> EncontrarPorNomeAsync(string produtoNome)
