@@ -9,5 +9,14 @@ namespace CDE.Domain.ViewModels
         public bool ProductActive { get; set; }
         public ProductGroup ProductGroup { get; set; }
         public UnitOfMeasurement ProductUnitOfMeasurement { get; set; }
+
+        public ProductCreateViewModel(string produtctName, int productQuantity, bool productActive, ProductGroup productGroup, UnitOfMeasurement productUnitOfMeasurement)
+        {
+            ProdutctName = produtctName;
+            ProductQuantity = productQuantity;
+            ProductActive = productActive;
+            ProductGroup = productGroup;
+            ProductUnitOfMeasurement = productUnitOfMeasurement;
+        }
     }
 }
