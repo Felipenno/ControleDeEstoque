@@ -1,27 +1,22 @@
+using AutoMapper;
 using CDE.Domain.Interfaces.Jwt;
 using CDE.Domain.Interfaces.Repository;
-using CDE.Infra.Context;
+using CDE.Domain.Interfaces.Service;
+using CDE.Infra;
 using CDE.Infra.Repository;
+using CDE.Service;
+using CDE.Service.AutoMapper;
 using CDE.Service.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CDE.Application
 {
@@ -38,16 +33,22 @@ namespace CDE.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IStorageLocationRepository, StorageLocationRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<DataProviders>();
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IStorageLocationService, StorageLocationService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>(); 
+
+            services.AddAutoMapper(a => a.AddProfile(new AutoMapperProfiles()));
+
             services.AddSwaggerGen(c =>
-               c.SwaggerDoc("v1", new OpenApiInfo { Title = "Estoque API", Version = "v1" })
-            );
-
-            services.AddDbContext<CDEContext>(x => x.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection")));
-
-            services.AddScoped<ILocalizacaoRepository, LocalizacaoRepository>();
-            services.AddScoped<IProdutoRepository, ProdutoRepository>();
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-            services.AddScoped<IAuthenticationService, JwtService>();
+              c.SwaggerDoc("v1", new OpenApiInfo { Title = "Estoque API", Version = "v1" }));
 
             services.AddSwaggerGen(c =>
             {

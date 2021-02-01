@@ -1,9 +1,9 @@
-﻿using CDE.Domain.Models;
+﻿using CDE.Domain.ViewModels;
 
 namespace CDE.Domain.Interfaces.Jwt
 {
     public interface IAuthenticationService
     {
-        string GerarToken(JwtUsuarioModel jwtUsuarioModel);
+        string Token(UserJwtModel jwtUsuarioModel);
     }
 }
