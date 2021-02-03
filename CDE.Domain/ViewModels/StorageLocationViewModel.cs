@@ -12,6 +12,5 @@ namespace CDE.Domain.ViewModels
 
         public int IdProduct { get; set; }
         public ProductModel Product { get; set; }
-
     }
 }

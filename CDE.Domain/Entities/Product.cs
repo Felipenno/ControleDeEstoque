@@ -26,7 +26,6 @@ namespace CDE.Domain.Entities
         public Product(int productId, string produtctName, int productQuantity, bool productActive, ProductGroup productGroup, UnitOfMeasurement productUnitOfMeasurement) : this(produtctName, productQuantity, productActive, productGroup, productUnitOfMeasurement)
         {
             ProductId = productId;
-
         }
     }
 }

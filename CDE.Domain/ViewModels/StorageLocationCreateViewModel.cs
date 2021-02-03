@@ -7,6 +7,5 @@
         public string Shelf { get; set; }
         public string Bay { get; set; }
         public int? IdProduct { get; set; }
-
     }
 }

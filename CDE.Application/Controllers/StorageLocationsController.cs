@@ -50,7 +50,6 @@ namespace CDE.Application.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
-
         }
 
         [HttpPut]

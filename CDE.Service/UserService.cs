@@ -13,12 +13,14 @@ namespace CDE.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthenticationService _authenticationService;
+        private readonly ICryptographyService _cryptographyService;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IAuthenticationService authenticationService)
+        public UserService(IUserRepository userRepository, IMapper mapper, IAuthenticationService authenticationService, ICryptographyService cryptographyService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _authenticationService = authenticationService;
+            _cryptographyService = cryptographyService;
         }
 
         public async Task<string> AddAsync(UserRegisterViewModel userRegister)
@@ -28,8 +30,9 @@ namespace CDE.Service
                 return "Esse email ja está cadastrado";
             }
 
+            userRegister.UserPassword =_cryptographyService.CreateEncryption(userRegister.UserPassword);
+
             var user = _mapper.Map<UserRegisterViewModel, User>(userRegister);
-            user.EncryptPassword();
 
             var affectedRows = await _userRepository.AddAsync(user);
             if (affectedRows <= 0)
@@ -53,7 +56,7 @@ namespace CDE.Service
 
         public async Task<object> Login(UserLoginViewModel userLoginViewModel)
         {
-            userLoginViewModel.EncryptPassword();
+            userLoginViewModel.UserPassword =_cryptographyService.CreateEncryption(userLoginViewModel.UserPassword);
             var user = await _userRepository.Login(userLoginViewModel);
             if (user == null)
             {

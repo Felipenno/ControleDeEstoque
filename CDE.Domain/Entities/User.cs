@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-
-namespace CDE.Domain.Entities
+﻿namespace CDE.Domain.Entities
 {
     public class User
     {
@@ -24,21 +21,6 @@ namespace CDE.Domain.Entities
         public User(int userId, string userName, string userEmail, string userPassword) : this(userName, userEmail, userPassword)
         {
             UserId = userId;
-        }
-
-        public void EncryptPassword()
-        {
-            var md5 = MD5.Create();
-            byte[] bytes = Encoding.ASCII.GetBytes(UserPassword);
-            byte[] hash = md5.ComputeHash(bytes);
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("X2"));
-            }
-
-            UserPassword = sb.ToString();
         }
     }
 }

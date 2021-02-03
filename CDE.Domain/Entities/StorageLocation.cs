@@ -8,8 +8,8 @@
         public string Shelf { get; private set; }
         public string Bay { get; private set; }
 
-        public int? IdProduct { get; set; }
-        public virtual Product Product { get; set; }
+        public int? IdProduct { get; private set; }
+        public virtual Product Product { get; private set; }
 
         public StorageLocation(string floor, string hall, string shelf, string bay, int? idProduct)
         {

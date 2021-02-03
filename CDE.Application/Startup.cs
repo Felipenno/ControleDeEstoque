@@ -6,6 +6,7 @@ using CDE.Infra;
 using CDE.Infra.Repository;
 using CDE.Service;
 using CDE.Service.AutoMapper;
+using CDE.Service.Cryptography;
 using CDE.Service.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +30,6 @@ namespace CDE.Application
 
         public IConfiguration Configuration { get; }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -43,7 +43,9 @@ namespace CDE.Application
             services.AddScoped<IStorageLocationService, StorageLocationService>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<IAuthenticationService, AuthenticationService>(); 
+            services.AddScoped<ICryptographyService, CryptographyService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddAutoMapper(a => a.AddProfile(new AutoMapperProfiles()));
 
