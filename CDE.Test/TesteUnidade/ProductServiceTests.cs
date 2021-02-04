@@ -12,99 +12,109 @@ using Xunit;
 using FluentAssertions;
 using CDE.Domain.Enum;
 using CDE.Service.AutoMapper;
+using AutoFixture;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace CDE.Test.TesteUnidade
 {
     public class ProductServiceTests
     {
         private readonly Mock<IProductRepository> _mockProductRepository;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly ProductCreateViewModel _productCreateViewModel;
-        //private readonly ProductUpdateViewModel _productUpdateViewModel;
-        //private readonly ProductViewModel _productViewModel;
-        private readonly Product _product;
-        private int _affectedRows;
+        private Mock<IMapper> _mockIMapper;
+        private IProductService _productService;
+
+        private readonly Fixture _fixture;
 
         public ProductServiceTests()
         {
+            _mockIMapper = new Mock<IMapper>();
             _mockProductRepository = new Mock<IProductRepository>();
-            _mockMapper = new Mock<IMapper>();
-
-            _product = new Product("arroz", 50, true, ProductGroup.Alimentos, UnitOfMeasurement.Kilo);
-            _productCreateViewModel = new ProductCreateViewModel("arroz", 50, true, ProductGroup.Alimentos, UnitOfMeasurement.Kilo);
-
-            _mockProductRepository.Setup(m => m.AddAsync(_product)).ReturnsAsync(_affectedRows);
-            _mockMapper.Setup(m => m.Map<Product>(_productCreateViewModel)).Returns(_product);
+            _fixture = new Fixture();
+            _productService = new ProductService(_mockProductRepository.Object, _mockIMapper.Object);
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(0)]
-        public async void Product_AddAsync(int affectedRows)
+        [Fact]
+        public async Task Product_AddAsync()
         {
-            _affectedRows = affectedRows;
+            var product = _fixture.Create<Product>();
+            var productModel = _fixture.Create<ProductCreateViewModel>();
+            _mockIMapper.Setup(m => m.Map<ProductCreateViewModel, Product>(productModel)).Returns(product);
+            _mockProductRepository.Setup(m => m.AddAsync(product)).ReturnsAsync(1);
 
-            var productService = new ProductService(_mockProductRepository.Object, _mockMapper.Object);
-            var isSucess = await productService.AddAsync(_productCreateViewModel);
+            var actionSuccess = await _productService.AddAsync(productModel);
 
-            _mockProductRepository.Verify(p => p.AddAsync(_product), Times.Once());
-            _mockMapper.Verify(m => m.Map<Product>(_productCreateViewModel), Times.Once());
-
-            if (affectedRows > 0)
-            {
-                isSucess.Should().BeTrue();
-            }
-            else
-            {
-                isSucess.Should().BeFalse();
-            }
-            
+            //_mockIMapper.Verify(a => a.Map<ProductCreateViewModel, Product>(productModel), Times.Once);
+            actionSuccess.Should().Be(true);
+            Mock.VerifyAll();
         }
 
-        //[Fact]
-        //public void Product_GetAllAsync()
-        //{
-        //    return await _productRepository.GetAllAsync();
-        //}
+        [Fact]
+        public async Task Product_GetAllAsync()
+        {
+            var listProductModel = _fixture.CreateMany<ProductViewModel>();
+            _mockProductRepository.Setup(m => m.GetAllAsync()).ReturnsAsync(listProductModel.ToList());
 
-        //[Fact]
-        //public void Product_SearchByName()
-        //{
-        //    var product = await _productRepository.SearchByName(productName);
-        //    return _mapper.Map<List<Product>, List<ProductViewModel>>(product);
-        //}
+            var productModel = await _productService.GetAllAsync();
 
-        //[Fact]
-        //public void Product_GetByIdAsync()
-        //{
-        //    Product product = await _productRepository.GetByIdAsync(id);
-        //    return _mapper.Map<Product, ProductViewModel>(product);
-        //}
+            productModel.Should().BeOfType<List<ProductViewModel>>();
+            Mock.VerifyAll();
+        }
 
-        //[Fact]
-        //public void Product_RemoveAsync()
-        //{
-        //    var affectedRows = await _productRepository.RemoveAsync(id);
-        //    if (affectedRows > 0)
-        //    {
-        //        return true;
-        //    }
+        [Fact]
+        public async Task Product_SearchByName()
+        {
+            string searchTerm = "nome prduto";
+            var listProduct = _fixture.CreateMany<Product>().ToList();
+            var listProductModel = _fixture.CreateMany<ProductViewModel>().ToList();
+            _mockProductRepository.Setup(m => m.SearchByName(searchTerm)).ReturnsAsync(listProduct);
+            _mockIMapper.Setup(m => m.Map<List<Product>, List<ProductViewModel>>(listProduct)).Returns(listProductModel);
 
-        //    return false;
-        //}
+            var productReceived = await _productService.SearchByName(searchTerm);
 
-        //[Fact]
-        //public void Product_UpdateAsync()
-        //{
-        //    Product product = _mapper.Map<ProductUpdateViewModel, Product>(productViewlModel);
-        //    var affectedRows = await _productRepository.UpdateAsync(product);
-        //    if (affectedRows > 0)
-        //    {
-        //        return true;
-        //    }
+            productReceived.Should().BeEquivalentTo(listProductModel);
+            Mock.VerifyAll();
+        }
 
-        //    return false;
-        //}
+        [Fact]
+        public async Task Product_GetByIdAsync()
+        {
+            var product = _fixture.Create<Product>();
+            var productModel = _fixture.Create<ProductViewModel>();
+            _mockProductRepository.Setup(m => m.GetByIdAsync(product.ProductId)).ReturnsAsync(product);
+            _mockIMapper.Setup(m => m.Map<Product, ProductViewModel>(product)).Returns(productModel);
+
+            var productReceived = await _productService.GetByIdAsync(product.ProductId);
+
+            productReceived.Should().Be(productModel);
+            Mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task Product_RemoveAsync()
+        {
+            var product = _fixture.Create<Product>();
+            _mockProductRepository.Setup(m => m.RemoveAsync(product.ProductId)).ReturnsAsync(1);
+
+            var actionSuccess = await _productService.RemoveAsync(product.ProductId);
+
+            actionSuccess.Should().Be(true);
+            Mock.VerifyAll();
+        }
+
+        [Fact]
+        public async Task Product_UpdateAsync()
+        {
+            var productModel = _fixture.Create<ProductUpdateViewModel>();
+            var product = _fixture.Create<Product>();
+            _mockProductRepository.Setup(m => m.UpdateAsync(product)).ReturnsAsync(1);
+            _mockIMapper.Setup(m => m.Map<ProductUpdateViewModel, Product>(productModel)).Returns(product);
+
+            var actionSuccess = await _productService.UpdateAsync(productModel);
+
+            actionSuccess.Should().Be(true);
+            Mock.VerifyAll();
+        }
 
     }
 }
