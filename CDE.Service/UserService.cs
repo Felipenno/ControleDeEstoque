@@ -54,7 +54,7 @@ namespace CDE.Service
             return true;
         }
 
-        public async Task<object> Login(UserLoginViewModel userLoginViewModel)
+        public async Task<UserJwtModel> Login(UserLoginViewModel userLoginViewModel)
         {
             userLoginViewModel.UserPassword =_cryptographyService.CreateEncryption(userLoginViewModel.UserPassword);
             var user = await _userRepository.Login(userLoginViewModel);
@@ -64,9 +64,9 @@ namespace CDE.Service
             }
 
             var userJwt = _mapper.Map<User, UserJwtModel>(user);
-            var token = _authenticationService.Token(userJwt);
+            userJwt.Token = _authenticationService.Token(userJwt);
 
-            return new { Token = token, Usuario = userJwt };
+            return userJwt;
         }
     }
 }

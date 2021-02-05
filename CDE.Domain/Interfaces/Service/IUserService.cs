@@ -7,6 +7,6 @@ namespace CDE.Domain.Interfaces.Service
     {
         Task<string> AddAsync(UserRegisterViewModel userRegister);
         Task<bool> EmailAlreadyExists(string email);
-        Task<object> Login(UserLoginViewModel userLoginViewModel);
+        Task<UserJwtModel> Login(UserLoginViewModel userLoginViewModel);
     }
 }

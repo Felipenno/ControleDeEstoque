@@ -1,20 +1,16 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using CDE.Domain.Entities;
 using CDE.Domain.Interfaces.Repository;
 using CDE.Domain.Interfaces.Service;
 using CDE.Domain.ViewModels;
 using CDE.Service;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 using FluentAssertions;
-using CDE.Domain.Enum;
-using CDE.Service.AutoMapper;
-using AutoFixture;
-using System.Threading.Tasks;
+using Moq;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace CDE.Test.TesteUnidade
 {
@@ -44,8 +40,7 @@ namespace CDE.Test.TesteUnidade
 
             var actionSuccess = await _productService.AddAsync(productModel);
 
-            //_mockIMapper.Verify(a => a.Map<ProductCreateViewModel, Product>(productModel), Times.Once);
-            actionSuccess.Should().Be(true);
+            actionSuccess.Should().Be(true, "Os dados foram inseridos no banco com sucesso");
             Mock.VerifyAll();
         }
 
